@@ -1,0 +1,65 @@
+name: Android APK építése
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kód letöltése
+        uses: actions/checkout@v4
+
+      - name: Node.js beállítása
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Java beállítása
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Függőségek telepítése
+        run: npm install
+
+      - name: Webes rész előkészítése
+        run: npm run build
+
+      - name: Android projekt létrehozása
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: Állandó aláíró kulcs beállítása (hogy a frissítések telepíthetők legyenek)
+        run: |
+          mkdir -p ~/.android
+          cp keystore/debug.keystore ~/.android/debug.keystore
+
+      - name: APK fordítása
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: APK átnevezése
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk szogyakorlo.apk
+
+      - name: APK feltöltése letölthető fájlként
+        uses: actions/upload-artifact@v4
+        with:
+          name: szogyakorlo-apk
+          path: szogyakorlo.apk
+
+      - name: Kiadás (Release) készítése verziócímkénél
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: szogyakorlo.apk
