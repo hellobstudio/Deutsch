@@ -1,0 +1,8 @@
+{
+  "appId": "hu.szogyakorlo.nemet",
+  "appName": "Szógyakorló",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}

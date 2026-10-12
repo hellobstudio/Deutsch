@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#18212E">
+  <title>Szógyakorló</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="stripe" aria-hidden="true"><span class="s-der"></span><span class="s-die"></span><span class="s-das"></span></div>
+    <div class="topbar-inner">
+      <a class="brand" href="#/">Szógyakorló</a>
+      <nav class="nav">
+        <a href="#/" data-nav="home">Gyakorlás</a>
+        <a href="#/szavak" data-nav="words">Szókincs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="lib/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
